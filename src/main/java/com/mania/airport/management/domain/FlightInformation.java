@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -15,12 +15,16 @@ public class FlightInformation {
 	private String id;
 	
 	@Field("departure")
-	@Indexed
+	@TextIndexed
 	private String departureCity;
 	
 	@Field("destination")
-	@Indexed
+	@TextIndexed
 	private String destinationCity;
+	
+	@TextIndexed(weight= 2)
+	private String description;
+	
 	private FlightType type;
 	private boolean isDelayed;
 	private int durationMin;

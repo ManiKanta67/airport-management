@@ -13,7 +13,7 @@ import com.mania.airport.management.domain.FlightInformation;
 @Component
 public class ApplicationRunner implements CommandLineRunner {
 
-	// This is main class that exeuctes queries against database.
+	// This is main class that executes queries against database.
 	private MongoTemplate mongoTemplate;
 	
 	public ApplicationRunner(MongoTemplate mongoTemplate) {
