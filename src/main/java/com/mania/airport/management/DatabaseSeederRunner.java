@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.mania.airport.management.domain.Aircraft;
 import com.mania.airport.management.domain.FlightInformation;
 import com.mania.airport.management.domain.FlightType;
+import com.mania.airport.management.repository.FlightInformationRepository;
 
 /*
  * This is just a demo to test insertions, updation and deletions. Not product ready by any means.
@@ -21,10 +23,10 @@ import com.mania.airport.management.domain.FlightType;
 @Order(1)
 public class DatabaseSeederRunner implements CommandLineRunner {
 
-	private MongoTemplate mongoTemplate;
+	private FlightInformationRepository  flightInformationRepository;
 
-	public DatabaseSeederRunner(MongoTemplate mongoTemplate) {
-		this.mongoTemplate = mongoTemplate;
+	public DatabaseSeederRunner(FlightInformationRepository flightInformationRepository) {
+		this.flightInformationRepository = flightInformationRepository;
 	}
 
 	@Override
@@ -101,10 +103,20 @@ public class DatabaseSeederRunner implements CommandLineRunner {
 
 		List<FlightInformation> flights = Arrays.asList(flightOne, flightTwo, flightThree, flightFour, flightFive,
 				flightSix);
-		this.mongoTemplate.insertAll(flights);
+		
+		flightInformationRepository.insert(flights);
+		
+		//Count
+		long count = flightInformationRepository.count();
+		System.out.println("Total flights in database : " + count);
+		
+//		// Print
+//		List<FlightInformation> flightsInDb = this.flightInformationRepository.findAll(Sort.by("departureCity").ascending());
+		System.out.println("_____ Seeder finished executing___________");
+		
 	}
 
 	private void empty() {
-		this.mongoTemplate.remove(new Query(), FlightInformation.class);
+		flightInformationRepository.deleteAll();
 	}
 }
