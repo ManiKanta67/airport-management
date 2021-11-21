@@ -14,6 +14,9 @@ import com.mania.airport.management.domain.Aircraft;
 import com.mania.airport.management.domain.FlightInformation;
 import com.mania.airport.management.domain.FlightType;
 
+/*
+ * This is just a demo to test insertions, updation and deletions. Not product ready by any means.
+ */
 @Component
 @Order(1)
 public class DatabaseSeederRunner implements CommandLineRunner {
