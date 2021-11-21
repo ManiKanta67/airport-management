@@ -67,8 +67,10 @@ public class DatabaseSeederRunner implements CommandLineRunner {
 		flightTwo.setAircraft(new Aircraft("737", 180));
 		
 		//Seed
+		// No longer need to save these as we have FlightCascadeEventListener for saving these objects.
+		/*
 		List<Airport> airports = Arrays.asList(rome, paris, copenhagen);
-		this.airportRepository.insert(airports);
+		this.airportRepository.insert(airports); */
 		
 		List<FlightInformation> flights = Arrays.asList(flightOne, flightTwo);
 		this.flightInformationRepository.insert(flights);
