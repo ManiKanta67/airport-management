@@ -6,14 +6,14 @@ import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import com.mania.airport.management.domain.Aircraft;
+import com.mania.airport.management.domain.Airport;
 import com.mania.airport.management.domain.FlightInformation;
 import com.mania.airport.management.domain.FlightType;
+import com.mania.airport.management.repository.AirportRepository;
 import com.mania.airport.management.repository.FlightInformationRepository;
 
 /*
@@ -24,9 +24,13 @@ import com.mania.airport.management.repository.FlightInformationRepository;
 public class DatabaseSeederRunner implements CommandLineRunner {
 
 	private FlightInformationRepository  flightInformationRepository;
+	private AirportRepository airportRepository;
+	private MongoTemplate mongoTemplate;
 
-	public DatabaseSeederRunner(FlightInformationRepository flightInformationRepository) {
+	public DatabaseSeederRunner(FlightInformationRepository flightInformationRepository, AirportRepository airportRepository, MongoTemplate mongoTemplate) {
 		this.flightInformationRepository = flightInformationRepository;
+		this.airportRepository = airportRepository;
+		this.mongoTemplate = mongoTemplate;
 	}
 
 	@Override
@@ -36,84 +40,41 @@ public class DatabaseSeederRunner implements CommandLineRunner {
 	}
 
 	private void seed() {
+		// Airports
+		Airport rome = new Airport("11", "Leonardo da Vinci", "Rome", 23478342);
+		Airport paris = new Airport("12", "Charles de Gaulle", "Rome", 23478342);
+		Airport copenhagen = new Airport("13", "Copenhange Airport", "Rome", 23478342);
+		
+		// Flight information
 		FlightInformation flightOne = new FlightInformation();
+		flightOne.setId("14");
 		flightOne.setDelayed(false);
-		flightOne.setDepartureCity("Rome");
-		flightOne.setDestinationCity("Paris");
-		flightOne.setDepartureDate(LocalDate.of(2019, 3, 12));
+		flightOne.setDepartureCity(rome);
+		flightOne.setDestinationCity(paris);
+		flightOne.setDepartureDate(LocalDate.of(2021, 11, 21));
 		flightOne.setType(FlightType.International);
 		flightOne.setDurationMin(80);
-		flightOne.setAircraft(new Aircraft("737", 100));
-		flightOne.setDescription("Flight from Rome to Paris");
-
+		flightOne.setAircraft(new Aircraft("737", 180));
+		
 		FlightInformation flightTwo = new FlightInformation();
+		flightTwo.setId("15");
 		flightTwo.setDelayed(false);
-		flightTwo.setDepartureCity("New York");
-		flightTwo.setDestinationCity("Copenhagen");
-		flightTwo.setDepartureDate(LocalDate.of(2019, 5, 11));
+		flightTwo.setDepartureCity(paris);
+		flightTwo.setDestinationCity(copenhagen);
+		flightTwo.setDepartureDate(LocalDate.of(2021, 11, 21));
 		flightTwo.setType(FlightType.International);
 		flightTwo.setDurationMin(600);
-		flightTwo.setAircraft(new Aircraft("747", 300));
-		flightTwo.setDescription("Flight from NY to Copenhagen via Rome");
-
-		FlightInformation flightThree = new FlightInformation();
-		flightThree.setDelayed(true);
-		flightThree.setDepartureCity("Bruxelles");
-		flightThree.setDestinationCity("Bucharest");
-		flightThree.setDepartureDate(LocalDate.of(2019, 6, 12));
-		flightThree.setType(FlightType.International);
-		flightThree.setDurationMin(150);
-		flightThree.setAircraft(new Aircraft("A320", 170));
-
-		FlightInformation flightFour = new FlightInformation();
-		flightFour.setDelayed(true);
-		flightFour.setDepartureCity("Madrid");
-		flightFour.setDestinationCity("Barcelona");
-		flightFour.setDepartureDate(LocalDate.of(2019, 6, 12));
-		flightFour.setType(FlightType.Internal);
-		flightFour.setDurationMin(120);
-		flightFour.setAircraft(new Aircraft("A319", 150));
-
-		FlightInformation flightFive = new FlightInformation();
-		flightFive.setDelayed(false);
-		flightFive.setDepartureCity("Las Vegas");
-		flightFive.setDestinationCity("Washington");
-		flightFive.setDepartureDate(LocalDate.of(2019, 6, 10));
-		flightFive.setType(FlightType.Internal);
-		flightFive.setDurationMin(400);
-		flightFive.setAircraft(new Aircraft("A319", 150));
-		flightFive.setDescription("Flight from LA to Washington via Paris");
-
-		FlightInformation flightSix = new FlightInformation();
-		flightSix.setDelayed(false);
-		flightSix.setDepartureCity("Bucharest");
-		flightSix.setDestinationCity("Rome");
-		flightSix.setDepartureDate(LocalDate.of(2019, 6, 13));
-		flightSix.setType(FlightType.International);
-		flightSix.setDurationMin(100);
-		flightSix.setAircraft(new Aircraft("A321 Neo", 200));
-
-		// You can insert them one by one as shown below, but not efficient
-		/*
-		 * this.mongoTemplate.insert(flightOne); this.mongoTemplate.insert(flightTwo);
-		 * this.mongoTemplate.insert(flightThree);
-		 * this.mongoTemplate.insert(flightFour); this.mongoTemplate.insert(flightFive);
-		 * this.mongoTemplate.insert(flightSix);
-		 */
-
-		List<FlightInformation> flights = Arrays.asList(flightOne, flightTwo, flightThree, flightFour, flightFive,
-				flightSix);
+		flightTwo.setAircraft(new Aircraft("737", 180));
 		
-		flightInformationRepository.insert(flights);
+		//Seed
+		List<Airport> airports = Arrays.asList(rome, paris, copenhagen);
+		this.airportRepository.insert(airports);
 		
-		//Count
-		long count = flightInformationRepository.count();
-		System.out.println("Total flights in database : " + count);
+		List<FlightInformation> flights = Arrays.asList(flightOne, flightTwo);
+		this.flightInformationRepository.insert(flights);
 		
-//		// Print
-//		List<FlightInformation> flightsInDb = this.flightInformationRepository.findAll(Sort.by("departureCity").ascending());
-		System.out.println("_____ Seeder finished executing___________");
-		
+		// Print
+		FlightPrinter.print(flights);
 	}
 
 	private void empty() {

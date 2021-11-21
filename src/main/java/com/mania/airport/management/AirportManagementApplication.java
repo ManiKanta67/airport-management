@@ -19,6 +19,7 @@ public class AirportManagementApplication {
 		SpringApplication.run(AirportManagementApplication.class, args);
 	}
 	
+	/*
 	@Bean
 	public MongoCustomConversions customConversions()
 	{
@@ -26,5 +27,5 @@ public class AirportManagementApplication {
 		converters.add(new AircraftDbReadConverter());
 		converters.add(new AircraftDbWriteConverter());
 		return new MongoCustomConversions(converters);
-	}
+	}*/
 }
