@@ -15,7 +15,7 @@ import com.mania.airport.management.domain.FlightInformation;
 import com.mania.airport.management.domain.FlightType;
 
 @Service
-public class FlightInformationQueries {
+public class FlightInformationQueries { 
 	private MongoTemplate mongoTemplate;
 
 	public FlightInformationQueries(MongoTemplate mongotemplate) {
